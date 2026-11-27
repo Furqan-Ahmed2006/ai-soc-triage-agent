@@ -18,7 +18,7 @@ Rather than relying entirely on LLM-generated conclusions, Sentinel-LogiX separa
 
 <p align="center">
   <a href="https://ai-soc-triage-agent-nxawglcq2rugdrj3s3c32u.streamlit.app/">🚀 Live Demo</a> ·
-  <a href="https://github.com/Furqan-Ahmed2006">📂 Source Code</a>
+  <a href="https://github.com/Furqan-Ahmed2006/ai-soc-triage-agent">📂 Source Code</a>
 </p>
 
 ---
