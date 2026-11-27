@@ -17,8 +17,8 @@ Built around a genuine **Model Context Protocol (MCP) client-server architecture
 Rather than relying entirely on LLM-generated conclusions, Sentinel-LogiX separates deterministic security analysis from AI reasoning to improve transparency, reliability, and auditability.
 
 <p align="center">
-  <a href="YOUR_STREAMLIT_APP_URL">🚀 Live Demo</a> ·
-  <a href="YOUR_GITHUB_REPOSITORY_URL">📂 Source Code</a>
+  <a href="https://ai-soc-triage-agent-nxawglcq2rugdrj3s3c32u.streamlit.app/">🚀 Live Demo</a> ·
+  <a href="https://github.com/Furqan-Ahmed2006">📂 Source Code</a>
 </p>
 
 ---
@@ -365,9 +365,9 @@ soc-agent/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+git clone https://github.com/Furqan-Ahmed2006/ai-soc-triage-agent.git
 
-cd YOUR_REPOSITORY
+cd https://github.com/Furqan-Ahmed2006/ai-soc-triage-agent
 ```
 
 ### 2. Create a virtual environment
@@ -428,7 +428,7 @@ http://localhost:8501
 
 **Try Sentinel-LogiX:**
 
-[Open Live Application](YOUR_STREAMLIT_APP_URL)
+[Open Live Application](https://ai-soc-triage-agent-nxawglcq2rugdrj3s3c32u.streamlit.app/)
 
 
 
@@ -451,7 +451,7 @@ http://localhost:8501
 
 
 
-[GitHub](https://github.com/Furqan-Ahmed2006) · [LinkedIn](www.linkedin.com/in/furqanahmedcs)
+[GitHub](https://github.com/Furqan-Ahmed2006) · [LinkedIn](https://www.linkedin.com/in/furqanahmedcs/)
 
 ---
 
