@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 from playwright.sync_api import sync_playwright
 
@@ -21,35 +22,68 @@ def wake_up_app() -> None:
             ),
         )
         page = context.new_page()
+        page.set_default_timeout(30_000)
 
         print(f"Opening {APP_URL} ...")
-        page.goto(APP_URL, wait_until="domcontentloaded", timeout=60_000)
-        page.wait_for_timeout(5_000)
+        page.goto(APP_URL, wait_until="domcontentloaded", timeout=90_000)
+        page.wait_for_timeout(8_000)
+        print(f"Landed on URL: {page.url} | Title: {page.title()}")
 
-        wake_button = page.locator("button:has-text('Yes, get this app back up!')")
-        if wake_button.count() > 0:
-            print("App is sleeping. Clicking wake-up button...")
-            wake_button.first.click()
-            page.wait_for_timeout(15_000)
+    
+        wake_pattern = re.compile(r"get this app back up", re.I)
+        clicked_wake = False
 
-        page.wait_for_selector('[data-testid="stAppViewContainer"]', timeout=45_000)
-        print("Main Streamlit UI loaded.")
-
-        expand_sidebar_btn = page.locator('[data-testid="stSidebarCollapsedControl"] button')
-        if expand_sidebar_btn.count() > 0 and expand_sidebar_btn.first.is_visible():
-            print("Sidebar is collapsed. Opening sidebar...")
-            expand_sidebar_btn.first.click()
-            page.wait_for_timeout(2_000)
+        page_wake = page.get_by_role("button", name=wake_pattern)
+        if page_wake.count() > 0 and page_wake.first.is_visible():
+            print("Wake-up button found on page. Clicking...")
+            page_wake.first.click()
+            clicked_wake = True
         else:
-            print("Sidebar is already open.")
+            for frame in page.frames:
+                frame_wake = frame.get_by_role("button", name=wake_pattern)
+                if frame_wake.count() > 0 and frame_wake.first.is_visible():
+                    print("Wake-up button found inside iframe. Clicking...")
+                    frame_wake.first.click()
+                    clicked_wake = True
+                    break
 
-        page.mouse.wheel(0, 300)
-        page.wait_for_timeout(3_000)
-        page.mouse.wheel(0, -300)
+        if clicked_wake:
+            page.wait_for_timeout(20_000)
+
+        
+        container_ready = False
+        try:
+            page.wait_for_selector('[data-testid="stAppViewContainer"]', timeout=30_000)
+            container_ready = True
+            print("Streamlit app container is visible.")
+        except Exception:
+            for frame in page.frames:
+                try:
+                    frame.wait_for_selector('[data-testid="stAppViewContainer"]', timeout=10_000)
+                    container_ready = True
+                    print("Streamlit app container is visible inside iframe.")
+                    break
+                except Exception:
+                    continue
+
+        if not container_ready:
+            print("Note: App container not yet visible (likely cold-starting/waking). Ping recorded.")
+
+
+        sidebar_btn = page.locator('[data-testid="stSidebarCollapsedControl"] button')
+        if sidebar_btn.count() > 0 and sidebar_btn.first.is_visible():
+            print("Opening collapsed sidebar...")
+            sidebar_btn.first.click()
+            page.wait_for_timeout(2_000)
+
+
+        page.mouse.wheel(0, 250)
+        page.wait_for_timeout(2_000)
+        page.mouse.wheel(0, -250)
         page.wait_for_timeout(2_000)
 
         browser.close()
-        print("Keep-alive session completed with zero LLM token usage.")
+        print("Keep-alive run completed cleanly.")
 
 
 if __name__ == "__main__":
